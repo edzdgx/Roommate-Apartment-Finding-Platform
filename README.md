@@ -1,2 +1,2 @@
 # Roommate-Apartment-Finding-Platform
-EECS E6893 final project
+EECS E6893 Big Data Analytics final project
