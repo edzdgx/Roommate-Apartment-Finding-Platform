@@ -38,6 +38,7 @@ def search_post(request):
     'Same Gender': ['Yes'],
     'Time': ['Early Bird']}>
     '''
+    # TODO: fix getlist()
     print('*******************************8post*************8')
     original_data['roommatesRecommendation'] = "Roommates Recommendation"
     original_data['apartmentRecommendation'] = "Apartment Recommendation"
@@ -68,7 +69,7 @@ def search_post(request):
 
 def show_results(request):
     '''
-    please put the result there and I can show them on the result page
+    TODO: please put the results here and I can show them on the result page
     '''
     print(f'request: {request.POST}')
     results_data= {}
@@ -138,4 +139,26 @@ def push_to_gbq(results_data):
         print("New rows have been added.")
     else:
         print("Encountered errors while inserting rows: {}".format(errors))
+
+def pull_from_gbp(option):
+    client = bigquery.Client()
+    if option == 'apartment':
+        query = """
+            SELECT *
+            FROM `big-data-6893-326823.roommate.apartments`
+        """
+    elif option == 'user':
+        query = """
+            SELECT *
+            FROM `big-data-6893-326823.roommate.users`
+        """
+
+    query_job = client.query(query)
+
+    # TODO: store query into spark dataframe
+
+    # list of dict
+    query_data = [dict(row.items()) for row in query_job]
+    print(query_data)
+    return query_data
 

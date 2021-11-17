@@ -1,7 +1,7 @@
 # ref: https://cloud.google.com/bigquery/docs/samples/bigquery-table-insert-rows-explicit-none-insert-ids#bigquery_table_insert_rows_explicit_none_insert_ids-python
 # set credentials
 import os
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/Users/edz/.ssh/big-data-6893-326823-15d1e60fd014.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials/big-data-6893-326823-15d1e60fd014.json"
 
 from google.cloud import bigquery
 import datetime
