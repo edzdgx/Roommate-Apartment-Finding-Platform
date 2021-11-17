@@ -13,55 +13,55 @@ def search_post(request):
     '''
     original_data= {}
     print('searching')
-    if request.POST:
-        '''
-        print(request.POST)
 
-        <QueryDict: {'csrfmiddlewaretoken': ['Mevza3aCOACHG7V47lPNHpy5NllqpigjnUXdhx1DkPaytFLfiAeXsevYSGmAqnhE'],
-        'First Name': ['Jiaxiang'],
-        'Last Name': ['Zhang'],
-        'Uni': ['jz3275'],
-        'Gender': ['Male'],
-        'Nationality': ['China'],
-        'Email': ['jz3275@columbia.edu'],
-        'School': ['SEAS'],
-        'Major': ['Electrical Engineering'],
-        'Smoking': ['No'],
-        'Alcohol': ['No'],
-        'Certain Apartment': ['No'],
-        'Apartment': [''],
-        'Distance': ['near', 'pretty near'],
-        'Room Type': ['Studio', '1b1b', '2b1b', '2b2b'],
-        'Roommate': ['Yes'],
-        'Number': ['One', 'Two'],
-        'Same Major': ['No'],
-        'Same Gender': ['Yes'],
-        'Time': ['Early Bird']}>
-        '''
-        print('*******************************8post*************8')
-        original_data['roommatesRecommendation'] = "Roommates Recommendation"
-        original_data['apartmentRecommendation'] = "Apartment Recommendation"
-        original_data['firstName'] = request.POST.getlist('First Name')
-        original_data['lastName'] = request.POST.getlist('Last Name')
-        original_data['uni'] = request.POST.getlist('Uni')
-        original_data['gender'] = request.POST.getlist('Gender')
-        original_data['nationality'] = request.POST.getlist('Nationality')
-        original_data['email'] = request.POST.getlist('Email')
-        original_data['school'] = request.POST.getlist('School')
-        original_data['major'] = request.POST.getlist('Major')
-        original_data['smoking'] = request.POST.getlist('Smoking')
-        original_data['alcohol'] = request.POST.getlist('Alcohol')
-        original_data['certainApartment'] = request.POST.getlist('Certain Apartment')
-        original_data['apartment'] = request.POST.getlist('Apartment')
-        original_data['distance'] = request.POST.getlist('Distance')
-        original_data['roomType'] = request.POST.getlist('Room Type')
-        original_data['roommate'] = request.POST.getlist('Roommate')
-        original_data['number'] = request.POST.getlist('Number')
-        original_data['sameMajor'] = request.POST.getlist('Same Major')
-        original_data['sameGender'] = request.POST.getlist('Same Gender')
-        original_data['time'] = request.POST.getlist('Time')
+    '''
+    print(request.POST)
 
-    print(original_data)
+    <QueryDict: {'csrfmiddlewaretoken': ['Mevza3aCOACHG7V47lPNHpy5NllqpigjnUXdhx1DkPaytFLfiAeXsevYSGmAqnhE'],
+    'First Name': ['Jiaxiang'],
+    'Last Name': ['Zhang'],
+    'Uni': ['jz3275'],
+    'Gender': ['Male'],
+    'Nationality': ['China'],
+    'Email': ['jz3275@columbia.edu'],
+    'School': ['SEAS'],
+    'Major': ['Electrical Engineering'],
+    'Smoking': ['No'],
+    'Alcohol': ['No'],
+    'Certain Apartment': ['No'],
+    'Apartment': [''],
+    'Distance': ['near', 'pretty near'],
+    'Room Type': ['Studio', '1b1b', '2b1b', '2b2b'],
+    'Roommate': ['Yes'],
+    'Number': ['One', 'Two'],
+    'Same Major': ['No'],
+    'Same Gender': ['Yes'],
+    'Time': ['Early Bird']}>
+    '''
+    print('*******************************8post*************8')
+    original_data['roommatesRecommendation'] = "Roommates Recommendation"
+    original_data['apartmentRecommendation'] = "Apartment Recommendation"
+    original_data['firstName'] = request.POST.getlist('First Name')
+    original_data['lastName'] = request.POST.getlist('Last Name')
+    original_data['uni'] = request.POST.getlist('Uni')
+    original_data['gender'] = request.POST.getlist('Gender')
+    original_data['nationality'] = request.POST.getlist('Nationality')
+    original_data['email'] = request.POST.getlist('Email')
+    original_data['school'] = request.POST.getlist('School')
+    original_data['major'] = request.POST.getlist('Major')
+    original_data['smoking'] = request.POST.getlist('Smoking')
+    original_data['alcohol'] = request.POST.getlist('Alcohol')
+    original_data['certainApartment'] = request.POST.getlist('Certain Apartment')
+    original_data['apartment'] = request.POST.getlist('Apartment')
+    original_data['distance'] = request.POST.getlist('Distance')
+    original_data['roomType'] = request.POST.getlist('Room Type')
+    original_data['roommate'] = request.POST.getlist('Roommate')
+    original_data['number'] = request.POST.getlist('Number')
+    original_data['sameMajor'] = request.POST.getlist('Same Major')
+    original_data['sameGender'] = request.POST.getlist('Same Gender')
+    original_data['time'] = request.POST.getlist('Time')
+
+    print(f'orig data:{original_data}')
     show_results(request)
     return render(request, "post.html", original_data)
 
@@ -101,7 +101,7 @@ def show_results(request):
 
 
 def push_to_gbq(results_data):
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/Users/edz/.ssh/big-data-6893-326823-15d1e60fd014.json"
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials/big-data-6893-326823-15d1e60fd014.json"
     client = bigquery.Client()
     table_id = "big-data-6893-326823.roommate.users"
 
