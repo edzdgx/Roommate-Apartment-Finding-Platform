@@ -13,30 +13,6 @@ def search_post(request):
     original_data= {}
     print('searching')
 
-    '''
-    print(request.POST)
-
-    <QueryDict: {'csrfmiddlewaretoken': ['Mevza3aCOACHG7V47lPNHpy5NllqpigjnUXdhx1DkPaytFLfiAeXsevYSGmAqnhE'],
-    'First Name': ['Jiaxiang'],
-    'Nationality': ['China'],
-    'Email': ['jz3275@columbia.edu'],
-    'School': ['SEAS'],
-    'Major': ['Electrical Engineering'],
-    'Last Name': ['Zhang'],
-    'Uni': ['jz3275'],
-    'Gender': ['Male'],
-    'Smoking': ['No'],
-    'Alcohol': ['No'],
-    'Certain Apartment': ['No'],
-    'Apartment': [''],
-    'Distance': ['near', 'pretty near'],
-    'Room Type': ['Studio', '1b1b', '2b1b', '2b2b'],
-    'Roommate': ['Yes'],
-    'Number': ['One', 'Two'],
-    'Same Major': ['No'],
-    'Same Gender': ['Yes'],
-    'Time': ['Early Bird']}>
-    '''
     # TODO: fix getlist()
     print('*******************************8post*************8')
     original_data['roommatesRecommendation'] = "Roommates Recommendation"
@@ -70,6 +46,28 @@ def search_post(request):
 def show_results(request):
     '''
     TODO: please put the results here and I can show them on the result page
+
+    request: <QueryDict: {'csrfmiddlewaretoken': ['35iCA3t6AMFbFFU0KNQ4om1vNr609sUVMx64yaLX1SMaf9XFsaxps4NfjNtmOuL2'],
+    'First Name': ['Jiaxiang'],
+    'Last Name': ['Zhang'],
+    'Uni': ['jz3275'],
+    'Gender': ['Male'],
+    'Nationality': ['China'],
+    'Email': ['jz3275@columbia.edu'],
+    'School': ['SEAS'],
+    'Major': ['Electrical Engineering'],
+    'Smoking': ['No'],
+    'Alcohol': ['No'],
+    'Certain Apartment': ['No'],
+    'Apartment': [''],
+    'Distance': ['near', 'pretty near'],
+    'Room Type': ['Private room', 'Entire home/apt', 'Shared room'],
+    'Price': ['Cheap', 'Economical'],
+    'Roommate': ['Yes'],
+    'Number': ['One', 'Two'],
+    'Same Major': ['No'],
+    'Same Gender': ['Yes'],
+    'Time': ['Early Bird']}>
     '''
     print(f'request: {request.POST}')
     results_data= {}
