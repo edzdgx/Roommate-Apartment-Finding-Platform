@@ -35,7 +35,7 @@ def search_post(request):
     original_data['number'] = request.POST.getlist('Number')
     original_data['sameMajor'] = request.POST.getlist('Same Major')
     original_data['sameGender'] = request.POST.getlist('Same Gender')
-    original_data['time'] = request.POST.getlist('Time')
+    original_data['habit'] = request.POST.getlist('Habit')
     original_data['price'] = request.POST.getlist('Price')
 
     print(f'orig data:{original_data}')
@@ -67,7 +67,7 @@ def show_results(request):
     'Number': ['One', 'Two'],
     'Same Major': ['No'],
     'Same Gender': ['Yes'],
-    'Time': ['Early Bird']}>
+    'Habit': ['Early Bird']}>
     '''
     print(f'request: {request.POST}')
     results_data= {}
@@ -98,70 +98,71 @@ def show_results(request):
         results_data['nationality'] = request.POST['Nationality']
         results_data['email'] = request.POST['Email']
         # results_data['apartment'] = request.POST.getlist('Apartment')
+        results_data['habit'] = request.POST['Habit']
 
 
-#         push_to_gbq(results_data)
+        push_to_gbq(results_data)
     return render(request, 'results.html', results_data)
 
 
-# def push_to_gbq(results_data):
-#     os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials/big-data-6893-326823-15d1e60fd014.json"
-#     client = bigquery.Client()
-#     table_id = "big-data-6893-326823.roommate.users"
-#
-#
-#     rows_to_insert = [
-#         {
-#         'roommatesRecommendation': results_data['roommatesRecommendation'],
-#         'apartmentRecommendation': results_data['apartmentRecommendation'],
-#         'firstName': results_data['roommateRatio'],
-#         'lastName': results_data['apartmentRatio'],
-#         'uni': results_data['location'],
-#         'gender': results_data['contact'],
-#         'nationality': results_data['apartment'],
-#         'email': results_data['apartmentRatio1'],
-#         'school': results_data['location1'],
-#         'major': results_data['contact1'],
-#         'smoking': results_data['apartment1'],
-#         'alcohol': results_data['roomType1'],
-#         'certainApartment': results_data['firstName'],
-#         'apartment': results_data['lastName'],
-#         'distance': results_data['fullName'],
-#         'roomType': results_data['gender'],
-#         'roommate': results_data['nationality'],
-#         'number': results_data['email'],
-#         'sameMajor': results_data['apartment'],
-#         'sameGender': results_data['roomType'],
-#         'time': 'now'
-#         }
-#     ]
-#     errors = client.insert_rows_json(
-#         table_id, rows_to_insert, row_ids=[None] * len(rows_to_insert)
-#     )  # Make an API request.
-#     if errors == []:
-#         print("New rows have been added.")
-#     else:
-#         print("Encountered errors while inserting rows: {}".format(errors))
-#
-# def pull_from_gbp(option):
-#     client = bigquery.Client()
-#     if option == 'apartment':
-#         query = """
-#             SELECT *
-#             FROM `big-data-6893-326823.roommate.apartments`
-#         """
-#     elif option == 'user':
-#         query = """
-#             SELECT *
-#             FROM `big-data-6893-326823.roommate.users`
-#         """
-#
-#     query_job = client.query(query)
-#
-#     # TODO: store query into spark dataframe
-#
-#     # list of dict
-#     query_data = [dict(row.items()) for row in query_job]
-#     print(query_data)
-#     return query_data
+def push_to_gbq(results_data):
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials/big-data-6893-326823-15d1e60fd014.json"
+    client = bigquery.Client()
+    table_id = "big-data-6893-326823.roommate.users"
+
+
+    rows_to_insert = [
+        {
+        'roommatesRecommendation': results_data['roommatesRecommendation'],
+        'apartmentRecommendation': results_data['apartmentRecommendation'],
+        'firstName': results_data['roommateRatio'],
+        'lastName': results_data['apartmentRatio'],
+        'uni': results_data['location'],
+        'gender': results_data['contact'],
+        'nationality': results_data['apartment'],
+        'email': results_data['apartmentRatio1'],
+        'school': results_data['location1'],
+        'major': results_data['contact1'],
+        'smoking': results_data['apartment1'],
+        'alcohol': results_data['roomType1'],
+        'certainApartment': results_data['firstName'],
+        'apartment': results_data['lastName'],
+        'distance': results_data['fullName'],
+        'roomType': results_data['gender'],
+        'roommate': results_data['nationality'],
+        'number': results_data['email'],
+        'sameMajor': results_data['apartment'],
+        'sameGender': results_data['roomType'],
+        'habit': results_data['habit']
+        }
+    ]
+    errors = client.insert_rows_json(
+        table_id, rows_to_insert, row_ids=[None] * len(rows_to_insert)
+    )  # Make an API request.
+    if errors == []:
+        print("New rows have been added.")
+    else:
+        print("Encountered errors while inserting rows: {}".format(errors))
+
+def pull_from_gbp(option):
+    client = bigquery.Client()
+    if option == 'apartment':
+        query = """
+            SELECT *
+            FROM `big-data-6893-326823.roommate.apartments`
+        """
+    elif option == 'user':
+        query = """
+            SELECT *
+            FROM `big-data-6893-326823.roommate.users`
+        """
+
+    query_job = client.query(query)
+
+    # TODO: store query into spark dataframe
+
+    # list of dict
+    query_data = [dict(row.items()) for row in query_job]
+    print(query_data)
+    return query_data
 
