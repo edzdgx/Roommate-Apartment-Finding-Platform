@@ -1,0 +1,1 @@
+['BC', 'GSAPP', 'GSAS', 'Arts', 'CBS', 'CCS', 'CC', 'CJS', 'CLS', 'Medicine', 'SEAS', 'SGS', 'SIPA', 'JTS', 'Nursing', 'VCPS', 'SPS', 'MSPH', 'SSW', 'TC', 'UTS']
