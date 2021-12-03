@@ -10,15 +10,15 @@ import datetime
 client = bigquery.Client()
 
 # TODO(developer): Set table_id to the ID of table to append to.
-table_id = "big-data-6893-326823.roommate.apartments"
+table_id = "big-data-6893-326823.roommate.users"
 
 query = """
     SELECT *
-    FROM `big-data-6893-326823.roommate.apartments`
-    LIMIT 20
+    FROM `big-data-6893-326823.roommate.users`
+    LIMIT 1
 """
 query_job = client.query(query)  # Make an API request.
 
 # list of dict
 query_data = [dict(row.items()) for row in query_job]
-print(query_data)
+print(query_data[0].keys())
