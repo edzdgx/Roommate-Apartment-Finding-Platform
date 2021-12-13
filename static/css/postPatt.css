@@ -29,6 +29,24 @@ input[type=submit] {
       cursor: pointer;
 }
 
+input[type=button] {
+    width:30px;
+    height:28px;
+}
+
+#num {
+    width:64px;
+    height:25px;
+    text-align:center;
+}
+
+#num1 {
+    width:64px;
+    height:25px;
+    text-align:center;
+}
+
+
 input[type=submit]:hover {
       background-color: #62A8E5;
 }
