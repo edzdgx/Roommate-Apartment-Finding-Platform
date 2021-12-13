@@ -10,42 +10,51 @@ from google.cloud import bigquery
 def search_post(request):
     return render(request, "post.html")
 
-def process_data(request):
+def process_apt_data(request):
     if request.POST['Certain Apartment'] == 'Yes':
         apartment = request.POST['Apartment']
-        pull_apt_from_gbp(apartment)
+        query_apt_data = pull_apt_from_gbp_by_certain(apartment)
+    else:
+        distance = request.POST['numDistance']
+        budget = request.POST['numBudget']
+        roomType = request.POST.getlist('Room Type')
+        query_apt_data = pull_apt_from_gbp(distance, budget, roomType)
+    return query_apt_data
+
 #     apt_data_from_gbq =  pull_from_gbp('apartment') # type: list
 
 def show_results(request):
     '''
     TODO: please put the results here and I can show them on the result page
-
-    request: <QueryDict: {'csrfmiddlewaretoken': ['35iCA3t6AMFbFFU0KNQ4om1vNr609sUVMx64yaLX1SMaf9XFsaxps4NfjNtmOuL2'],
+    <QueryDict: {'csrfmiddlewaretoken': ['EmwCZrYwE79kaghvqgUA39De26046g8SjyPwwWktTTPDz974gEjX5mVfOBdAX76H'],
     'First Name': ['Jiaxiang'],
     'Last Name': ['Zhang'],
     'Uni': ['jz3275'],
+    'Age': ['22'],
     'Gender': ['Male'],
     'Nationality': ['China'],
     'Email': ['jz3275@columbia.edu'],
     'School': ['SEAS'],
-    'Major': ['Electrical Engineering'],
-    'Smoking': ['No'],
-    'Alcohol': ['No'],
-    'Certain Apartment': ['No'],
-    'Apartment': [''],
-    'Distance': ['near', 'pretty near'],
-    'Room Type': ['Private room', 'Entire home/apt', 'Shared room'],
-    'Price': ['Cheap', 'Economical'],
-    'Roommate': ['Yes'],
-    'Number': ['One', 'Two'],
-    'Same Major': ['No'],
-    'Same Gender': ['Yes'],
-    'Habit': ['Early Bird']}>
+     'Major': ['Electrical Engineering'],
+     'Smoking': ['No'],
+     'Alcohol': ['No'],
+     'Habit': ['Early Bird'],
+     'Pets': ['0'],
+     'Certain Apartment': ['No'],
+     'Apartment': ['ART LOFT/HOME:  DINNERS, GATHERINGS, PHOTO'],
+     'numDistance': ['3'],
+     'Room Type': ['Private room', 'Entire home/apt'],
+     'numBudget': ['1600'],
+     'Roommate': ['Yes'],
+     'Number': ['1', '2'],
+     'Same Major': ['No'],
+     'Same Gender': ['Yes']}>
     '''
 #     print(f'request: {request.POST}')
     results_data= {}
     if request.POST:
-        process_data(request)
+        query_apt_data = process_apt_data(request)
+        print(query_apt_data)
 #         results_data['roommatesRecommendation'] = "Roommates Recommendation"
 #         results_data['apartmentRecommendation'] = "Apartment Recommendation"
 #         results_data['roommateRatio'] = "95%"
@@ -141,19 +150,32 @@ def pull_from_gbp(option):
 #     print(query_data)
     return query_data
 
-def pull_apt_from_gbp(apartment):
+def pull_apt_from_gbp_by_certain(apartment):
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials/big-data-6893-326823-15d1e60fd014.json"
     client = bigquery.Client()
-    query = """
-        SELECT * FROM `big-data-6893-326823.roommate.apartment`
-        where name = "ART LOFT/HOME:  DINNERS, GATHERINGS, PHOTO"
-    """
-
+    string1 = "SELECT * FROM `big-data-6893-326823.roommate.apartment` where name = '"+ apartment  +"'"
+    query = string1
     query_job = client.query(query)
-
     # TODO: store query into spark dataframe
-
     # list of dict
     query_data = [dict(row.items()) for row in query_job]
-    print(query_data)
+#     print(query_data)
+    return query_data
+
+def pull_apt_from_gbp(distance, budget, roomType):
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials/big-data-6893-326823-15d1e60fd014.json"
+    client = bigquery.Client()
+    length = len(roomType)
+    if length == 3:
+        string1 = "SELECT * FROM `big-data-6893-326823.roommate.apartment` order by (-reviews_per_month *0.2 + abs(price_raw * 30 / Capacity - " + budget + ") * 0.4 + abs(distance_line - " + distance +") * 0.4) limit 3"
+    elif length == 2:
+        string1 = "SELECT * FROM `big-data-6893-326823.roommate.apartment` where room_type = '" + roomType[0] +"' or room_type = '" + roomType[1] +"' order by (-reviews_per_month *0.2 + abs(price_raw * 30 / Capacity - " + budget + ") * 0.4 + abs(distance_line - " + distance +") * 0.4) limit 300"
+    else:
+        string1 = "SELECT * FROM `big-data-6893-326823.roommate.apartment` where room_type = '" + roomType[0] +"' order by (-reviews_per_month *0.2 + abs(price_raw * 30 / Capacity - " + budget + ") * 0.4 + abs(distance_line - " + distance +") * 0.4) limit 3"
+    query = string1
+    query_job = client.query(query)
+    # TODO: store query into spark dataframe
+    # list of dict
+    query_data = [dict(row.items()) for row in query_job]
+#     print(query_data)
     return query_data
