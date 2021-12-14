@@ -25,22 +25,23 @@ def process_user_data(request):
     if request.POST['Roommate'] == 'No':
         return []
 
+    school = request.POST['School']
+    gender = request.POST['Gender']
+    number = str(request.POST.getlist('Number')).replace("[", "").replace("]", "").replace("'", "")
+
     if request.POST['Same School'] == 'Yes' and request.POST['Same Gender'] == 'Yes':
-        school = request.POST['School']
-        gender = request.POST['Gender']
-        query_user_data = roommate_sameSchool_sameGender(school, gender)
+        query_user_data = roommate_sameSchool_sameGender(school, gender, number)
 
     elif request.POST['Same School'] == 'No' and request.POST['Same Gender'] == 'Yes':
-        gender = request.POST['Gender']
-        query_user_data = roommate_sameGender(gender)
+        query_user_data = roommate_sameGender(gender, number)
 
     elif request.POST['Same School'] == 'Yes' and request.POST['Same Gender'] == 'No':
-        school = request.POST['School']
-        query_user_data = roommate_sameSchool(school)
+        query_user_data = roommate_sameSchool(school, number)
     else:
-        query_user_data = pull_from_gbp('user')
+        query_user_data = roommate_flexible(number)
 
-    return query_user_data
+    res = find_your_roommate(query_user_data)
+    return res
 
 def show_results(request):
     '''
@@ -73,10 +74,14 @@ def show_results(request):
 #     push_to_gbq(request)
     results_data= {}
     if request.POST:
-        query_apt_data = process_apt_data(request)
-        length_apt = len(query_apt_data)
         query_user_data = process_user_data(request)
         length_user = len(query_user_data)
+        number = str(request.POST.getlist('Number')).replace("[", "").replace("]", "").replace("'", "")
+        max = int(number[len(number) - 1]) * 2
+
+        query_apt_data = process_apt_data(request)
+        length_apt = len(query_apt_data)
+
 
         for i in range(length_apt):
             apartment_Position = "apartment" + str(i)
@@ -89,7 +94,7 @@ def show_results(request):
             results_data[distance_Position] = round(query_apt_data[i]["distance_line"],2)
 
         if length_user != 0:
-            for i in range(length_user):
+            for i in range(max):
                 fullName_Position = "fullName" + str(i)
                 email_Position = "email" + str(i)
                 gender_Position = "gender" + str(i)
@@ -170,12 +175,7 @@ def pull_from_gbp(option):
         """
 
     query_job = client.query(query)
-
-    # TODO: store query into spark dataframe
-
-    # list of dict
     query_data = [dict(row.items()) for row in query_job]
-#     print(query_data)
     return query_data
 
 def pull_apt_from_gbp_by_certain(apartment):
@@ -184,8 +184,6 @@ def pull_apt_from_gbp_by_certain(apartment):
     string1 = "SELECT * FROM `big-data-6893-326823.roommate.apartment` where name = '"+ apartment  +"'"
     query = string1
     query_job = client.query(query)
-    # TODO: store query into spark dataframe
-    # list of dict
     query_data = [dict(row.items()) for row in query_job]
     return query_data
 
@@ -201,46 +199,51 @@ def pull_apt_from_gbp(distance, budget, roomType):
         string1 = "SELECT * FROM `big-data-6893-326823.roommate.apartment` where room_type = '" + roomType[0] +"' order by (-reviews_per_month *0.2 + abs(price_raw * 30 / Capacity - " + budget + ") * 0.4 + abs(distance_line - " + distance +") * 0.4) limit 3"
     query = string1
     query_job = client.query(query)
-    # TODO: store query into spark dataframe
-    # list of dict
     query_data = [dict(row.items()) for row in query_job]
     return query_data
 
-def roommate_sameSchool_sameGender(school, gender):
+def roommate_sameSchool_sameGender(school, gender, number):
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials/big-data-6893-326823-15d1e60fd014.json"
     client = bigquery.Client()
-    string1 = "SELECT * FROM `big-data-6893-326823.roommate.roommates` where School = '" + school + "' and Gender = " + gender
+#     max = int(number[len(number) - 1]) * 2
+#     string1 = "SELECT * FROM `big-data-6893-326823.roommate.roommates` where School = '" + school + "' and Gender = " + gender + " and Number_of_Roommates = '" + number + "' limit " + str(max)
+    string1 = "SELECT * FROM `big-data-6893-326823.roommate.roommates` where School = '" + school + "' and Gender = " + gender + " and Number_of_Roommates = '" + number + "'"
     query = string1
+    print(query)
     query_job = client.query(query)
-    # TODO: store query into spark dataframe
-    # list of dict
     query_data = [dict(row.items()) for row in query_job]
 #     print(query_data)
     return query_data
 
-def roommate_sameSchool(school):
+def roommate_sameSchool(school, number):
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials/big-data-6893-326823-15d1e60fd014.json"
     client = bigquery.Client()
-    string1 = "SELECT * FROM `big-data-6893-326823.roommate.roommates` where School = '" + school + "'"
+    string1 = "SELECT * FROM `big-data-6893-326823.roommate.roommates` where School = '" + school + "' and Number_of_Roommates = '" + number + "'"
     query = string1
     query_job = client.query(query)
-    # TODO: store query into spark dataframe
-    # list of dict
     query_data = [dict(row.items()) for row in query_job]
-#     print(query_data)
     return query_data
 
-def roommate_sameGender(gender):
+def roommate_sameGender(gender, number):
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials/big-data-6893-326823-15d1e60fd014.json"
     client = bigquery.Client()
-    string1 = "SELECT * FROM `big-data-6893-326823.roommate.roommates` where Gender = '" + gender
+    string1 = "SELECT * FROM `big-data-6893-326823.roommate.roommates` where Gender = " + gender + " and Number_of_Roommates = '" + number + "'"
     query = string1
     query_job = client.query(query)
-    # TODO: store query into spark dataframe
-    # list of dict
     query_data = [dict(row.items()) for row in query_job]
-#     print(query_data)
     return query_data
 
-def find_your_roommate():
-    pass
+def roommate_flexible(number):
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials/big-data-6893-326823-15d1e60fd014.json"
+    client = bigquery.Client()
+    string1 = "SELECT * FROM `big-data-6893-326823.roommate.roommates` where Number_of_Roommates = '" + number + "'"
+    query = string1
+    query_job = client.query(query)
+    query_data = [dict(row.items()) for row in query_job]
+    return query_data
+
+'''
+TODO: Add algorithm here
+'''
+def find_your_roommate(query_user_data):
+    return query_user_data
