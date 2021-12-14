@@ -81,6 +81,7 @@ input[type=email]:focus {
     height: 200px;
     width: auto;
 }
+
 .td{
     display: table-cell;
     width: 100px;
@@ -88,6 +89,7 @@ input[type=email]:focus {
     vertical-align: middle;
     table-layout: fixed;
 }
+
 .table .td img{
     display: block;
     height: auto;

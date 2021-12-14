@@ -54,12 +54,12 @@ def show_results(request):
     results_data= {}
     if request.POST:
         query_apt_data = process_apt_data(request)
-        print(query_apt_data)
-#         results_data['roommatesRecommendation'] = "Roommates Recommendation"
-#         results_data['apartmentRecommendation'] = "Apartment Recommendation"
-#         results_data['roommateRatio'] = "95%"
+#         print(query_apt_data)
+        results_data['roommatesRecommendation'] = "Roommates Recommendation"
+        results_data['apartmentRecommendation'] = "Apartment Recommendation"
+        results_data['roommateRatio1'] = "95%"
 #         results_data['apartmentRatio'] = "98%"
-#         results_data['location'] = "Upper West Side"
+        results_data['location'] = "Upper West Side"
 #         results_data['apartment'] = "Cozy Clean Guest Room - Family Apt"
 # #         results_data['roomType'] = str(request.POST.getlist('Room Type')).replace('[','').replace(']','').replace("'",'')
 #         results_data['roomType'] = "Private room"
