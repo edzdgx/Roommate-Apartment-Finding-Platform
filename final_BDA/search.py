@@ -54,11 +54,23 @@ def show_results(request):
     results_data= {}
     if request.POST:
         query_apt_data = process_apt_data(request)
-#         print(query_apt_data)
+#         print(type(query_apt_data))
+        length = len(query_apt_data)
+        for i in range(length):
+            apartment_Position = "apartment" + str(i)
+            roomType_Position = "roomType" + str(i)
+            location_Position = "location" + str(i)
+            distance_Position = "distance" + str(i)
+            results_data[apartment_Position] = query_apt_data[i]["name"]
+            results_data[roomType_Position] = query_apt_data[i]["room_type"]
+            results_data[location_Position] = query_apt_data[i]["neighbourhood"]
+            results_data[distance_Position] = round(query_apt_data[i]["distance_line"],2)
+
         results_data['roommatesRecommendation'] = "Roommates Recommendation"
         results_data['apartmentRecommendation'] = "Apartment Recommendation"
-        results_data['roommateRatio1'] = "95%"
-#         results_data['apartmentRatio'] = "98%"
+        results_data['apartmentRatio0'] = "98%"
+        results_data['apartmentRatio1'] = "95%"
+        results_data['apartmentRatio2'] = "91%"
         results_data['location'] = "Upper West Side"
 #         results_data['apartment'] = "Cozy Clean Guest Room - Family Apt"
 # #         results_data['roomType'] = str(request.POST.getlist('Room Type')).replace('[','').replace(']','').replace("'",'')
@@ -169,7 +181,7 @@ def pull_apt_from_gbp(distance, budget, roomType):
     if length == 3:
         string1 = "SELECT * FROM `big-data-6893-326823.roommate.apartment` order by (-reviews_per_month *0.2 + abs(price_raw * 30 / Capacity - " + budget + ") * 0.4 + abs(distance_line - " + distance +") * 0.4) limit 3"
     elif length == 2:
-        string1 = "SELECT * FROM `big-data-6893-326823.roommate.apartment` where room_type = '" + roomType[0] +"' or room_type = '" + roomType[1] +"' order by (-reviews_per_month *0.2 + abs(price_raw * 30 / Capacity - " + budget + ") * 0.4 + abs(distance_line - " + distance +") * 0.4) limit 300"
+        string1 = "SELECT * FROM `big-data-6893-326823.roommate.apartment` where room_type = '" + roomType[0] +"' or room_type = '" + roomType[1] +"' order by (-reviews_per_month *0.2 + abs(price_raw * 30 / Capacity - " + budget + ") * 0.4 + abs(distance_line - " + distance +") * 0.4) limit 3"
     else:
         string1 = "SELECT * FROM `big-data-6893-326823.roommate.apartment` where room_type = '" + roomType[0] +"' order by (-reviews_per_month *0.2 + abs(price_raw * 30 / Capacity - " + budget + ") * 0.4 + abs(distance_line - " + distance +") * 0.4) limit 3"
     query = string1
