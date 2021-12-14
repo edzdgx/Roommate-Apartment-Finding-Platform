@@ -4,6 +4,8 @@ function display()
     for(i=0;i<all_tr.length;i++)
     {
         var tdvl=all_tr[i].getElementsByTagName("td")[0].innerText;
-        all_tr[i].style.display=tdvl==""?"none":"block";
+        if(tdvl == ""){
+            all_tr[i].style.display="none";
+        }
     }
 }
