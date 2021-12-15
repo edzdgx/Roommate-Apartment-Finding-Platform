@@ -5,6 +5,11 @@ from django.views.decorators import csrf
 
 import os
 from google.cloud import bigquery
+import numpy as np
+import pandas as pd
+from sklearn.metrics.pairwise import euclidean_distances
+from sklearn.preprocessing import StandardScaler
+from scipy.spatial.distance import hamming
 
 # this method will run when we first go to http://127.0.0.1:8000/search/ website
 def search_post(request):
@@ -242,8 +247,55 @@ def roommate_flexible(number):
     query_data = [dict(row.items()) for row in query_job]
     return query_data
 
-'''
-TODO: Add algorithm here
-'''
-def find_your_roommate(query_user_data):
+
+####################################find_your_roommate_algorithm#######################################
+# helper function to normalize features
+def normalize(df, features):
+    result = df.copy()
+    for feature_name in features:
+        max_value = df[feature_name].max()
+        min_value = df[feature_name].min()
+        result[feature_name] = ((df[feature_name] - min_value) / (max_value - min_value))*2-1
+    return result
+
+
+def find_your_roommate(query_user_data, algo='euclidean'):
+    # print(f'find_your_roommate query_user_data: {query_user_data}')
+    # print(f'type query_user_data: {type(query_user_data)}')
+    df = pd.DataFrame(query_user_data)
+    meta_data = df.drop(
+        labels=['int64_field_0', 'Full_Name', 'Email_address', 'Last_Name', 'First_Name', 'Uni', 'Nationality',
+                'School', 'Major', 'Roommate', 'Number_of_Roommates'], axis=1)
+    print(meta_data.columns)
+    # Index(['Gender', 'Smoking', 'Alchohol', 'Habit', 'Roommate', 'Age',
+    #        'Accept_Animals', 'Preferred_Budgets', 'Preferred_Distance'],
+    #       dtype='object')
+    features = ['Preferred_Budgets', 'Preferred_Distance', 'Age']
+    normalized_data = normalize(meta_data, features)
+    test_person = normalized_data.iloc[0]
+    if algo == 'euclidean':
+        x = test_person
+        dist_list = []
+        for i in range(normalized_data.shape[0]):
+            y = normalized_data.iloc[i]
+            dist = np.sqrt(np.sum([(a - b) * (a - b) for a, b in zip(x, y)]))
+            dist_list.append(dist)
+        idx = np.argsort(dist_list)[:10]
+        print(f'idx:{idx}')
+        res = df.iloc[idx]
+
+        return res.to_dict('records')
+
+    elif algo == 'kmeans':
+        from sklearn.cluster import KMeans
+        n_clusters = int(meta_data.shape[0] / 10)
+        km = KMeans(n_clusters=n_clusters)
+        mat = normalized_data.values
+        km.fit(mat)
+        # Get cluster assignment labels
+        labels = km.labels_
+        # Format results as a DataFrame
+        res = pd.DataFrame([normalized_data.index, labels]).T
+        return res.to_dict('records')
+
     return query_user_data
