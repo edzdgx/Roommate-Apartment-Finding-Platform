@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <title>Result for your recommendation</title>
     <link rel="stylesheet" href="../static/css/resultsPatt.css">
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../static/js/display.js"></script>
 </head>
-<body>
-
+<body onload="display()">
 <div class='table'>
     <div class='tr'>
         <div class='td'><img src="../static/picture/columbia_university.jpg"></div>
@@ -18,46 +19,90 @@
 
 
 <table>
-    <tr class="title">
+    <tr class="title" id="roommateTitle">
         <td colspan="5" class="title"><h2>{{ roommatesRecommendation }}</h2></td>
     </tr>
-    <tr class="subtitle">
-        <td class="subtitle"><h3> Recommend Ratio </h3></td>
+    <tr class="subtitle" id="roommateSubtitle">
         <td class="subtitle"><h3> Full Name </h3></td>
         <td class="subtitle"><h3> Email </h3></td>
         <td class="subtitle"><h3> Gender </h3></td>
         <td class="subtitle"><h3> Nationality </h3></td>
+        <td class="subtitle"><h3> Recommend Ratio </h3></td>
     </tr>
-    <tr class="content">
-        <td class="content"><p>{{ roommateRatio }}</p></td>
-        <td class="content"><p>{{ fullName }}</p></td>
-        <td class="content"><p>{{ email }}</p></td>
-        <td class="content"><p>{{ gender }}</p></td>
-        <td class="content"><p>{{ nationality }}</p></td>
+    <tr class="content" id="roommate0">
+        <td class="content"><p>{{ fullName0 }}</p></td>
+        <td class="content"><p>{{ email0 }}</p></td>
+        <td class="content"><p>{{ gender0 }}</p></td>
+        <td class="content"><p>{{ nationality0 }}</p></td>
+        <td class="content"><p>{{ roommateRatio0 }}</p></td>
     </tr>
-    <tr class="title">
+    <tr class="content" id="roommate1">
+        <td class="content"><p>{{ fullName1 }}</p></td>
+        <td class="content"><p>{{ email1 }}</p></td>
+        <td class="content"><p>{{ gender1 }}</p></td>
+        <td class="content"><p>{{ nationality1 }}</p></td>
+        <td class="content"><p>{{ roommateRatio1 }}</p></td>
+
+    </tr>
+    <tr class="content" id="roommate2">
+        <td class="content"><p>{{ fullName2 }}</p></td>
+        <td class="content"><p>{{ email2 }}</p></td>
+        <td class="content"><p>{{ gender2 }}</p></td>
+        <td class="content"><p>{{ nationality2 }}</p></td>
+        <td class="content"><p>{{ roommateRatio2 }}</p></td>
+    </tr>
+    <tr class="content" id="roommate3">
+        <td class="content"><p>{{ fullName3 }}</p></td>
+        <td class="content"><p>{{ email3 }}</p></td>
+        <td class="content"><p>{{ gender3 }}</p></td>
+        <td class="content"><p>{{ nationality3 }}</p></td>
+        <td class="content"><p>{{ roommateRatio3 }}</p></td>
+
+    </tr>
+    <tr class="content" id="roommate4">
+        <td class="content"><p>{{ fullName4 }}</p></td>
+        <td class="content"><p>{{ email4 }}</p></td>
+        <td class="content"><p>{{ gender4 }}</p></td>
+        <td class="content"><p>{{ nationality4 }}</p></td>
+        <td class="content"><p>{{ roommateRatio4 }}</p></td>
+    </tr>
+    <tr class="content" id="roommate5">
+        <td class="content"><p>{{ fullName5 }}</p></td>
+        <td class="content"><p>{{ email5 }}</p></td>
+        <td class="content"><p>{{ gender5 }}</p></td>
+        <td class="content"><p>{{ nationality5 }}</p></td>
+        <td class="content"><p>{{ roommateRatio5 }}</p></td>
+    </tr>
+    <tr class="title" id="apartmentTitle">
         <td colspan="5" class="title"><h2>{{ apartmentRecommendation }}</h2></td>
     </tr>
-    <tr class="subtitle">
-        <td class="subtitle"><h3> Recommend Ratio </h3></td>
+    <tr class="subtitle" id="apartmentSubtitle">
         <td class="subtitle"><h3> Apartment Name </h3></td>
         <td class="subtitle"><h3> Room Type </h3></td>
         <td class="subtitle"><h3> Location </h3></td>
-        <td class="subtitle"><h3> Distance </h3></td>
+        <td class="subtitle"><h3> Distance(km) </h3></td>
+        <td class="subtitle"><h3> Recommend Ratio </h3></td>
     </tr>
-    <tr class="content">
-        <td class="content"><p>{{ apartmentRatio }}</p></td>
-        <td class="content"><p>{{ apartment }}</p></td>
-        <td class="content"><p>{{ roomType }}</p></td>
-        <td class="content"><p>{{ location }}</p></td>
-        <td class="content"><p>{{ distance }}</p></td>
+    <tr class="content" id="apartment0">
+        <td class="content"><p>{{ apartment0 }}</p></td>
+        <td class="content"><p>{{ roomType0 }}</p></td>
+        <td class="content"><p>{{ location0 }}</p></td>
+        <td class="content"><p>{{ distance0 }}</p></td>
+        <td class="content"><p>{{ apartmentRatio0 }}</p></td>
     </tr>
-    <tr class="content">
-        <td class="content"><p>{{ apartmentRatio1 }}</p></td>
+    <tr class="content"  id="apartment1">
         <td class="content"><p>{{ apartment1 }}</p></td>
         <td class="content"><p>{{ roomType1 }}</p></td>
         <td class="content"><p>{{ location1 }}</p></td>
         <td class="content"><p>{{ distance1 }}</p></td>
+        <td class="content"><p>{{ apartmentRatio1 }}</p></td>
+    </tr>
+    <tr class="content" id="apartment2">
+        <td class="content"><p>{{ apartment2 }}</p></td>
+        <td class="content"><p>{{ roomType2 }}</p></td>
+        <td class="content"><p>{{ location2 }}</p></td>
+        <td class="content"><p>{{ distance2 }}</p></td>
+        <td class="content"><p>{{ apartmentRatio2 }}</p></td>
     </tr>
 </table>
 
