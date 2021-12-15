@@ -29,6 +29,24 @@ input[type=submit] {
       cursor: pointer;
 }
 
+input[type=button] {
+    width:30px;
+    height:28px;
+}
+
+#num {
+    width:64px;
+    height:25px;
+    text-align:center;
+}
+
+#num1 {
+    width:64px;
+    height:25px;
+    text-align:center;
+}
+
+
 input[type=submit]:hover {
       background-color: #62A8E5;
 }
@@ -63,6 +81,7 @@ input[type=email]:focus {
     height: 200px;
     width: auto;
 }
+
 .td{
     display: table-cell;
     width: 100px;
@@ -70,6 +89,7 @@ input[type=email]:focus {
     vertical-align: middle;
     table-layout: fixed;
 }
+
 .table .td img{
     display: block;
     height: auto;

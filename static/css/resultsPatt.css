@@ -8,7 +8,6 @@ table{
       height: 100px;
 }
 
-
 td[class=title]{
     display: table-cell;
     width: 100px;
