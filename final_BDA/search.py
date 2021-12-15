@@ -45,12 +45,12 @@ def process_user_data(request):
     else:
         query_user_data = roommate_flexible(number)
 
-    res = find_your_roommate(query_user_data)
+    res = find_your_roommate(request, query_user_data)
     return res
 
 def show_results(request):
     '''
-    TODO: Make sure how to calculate this ration
+    TODO: Make sure how to calculate this ratio
     <QueryDict: {'csrfmiddlewaretoken': ['EmwCZrYwE79kaghvqgUA39De26046g8SjyPwwWktTTPDz974gEjX5mVfOBdAX76H'],
     'First Name': ['Jiaxiang'],
     'Last Name': ['Zhang'],
@@ -258,23 +258,49 @@ def normalize(df, features):
         result[feature_name] = ((df[feature_name] - min_value) / (max_value - min_value))*2-1
     return result
 
+def normalize_target(target, df, features):
+    for feature_name in features:
+        max_value = df[feature_name].max()
+        min_value = df[feature_name].min()
+        target[feature_name] = ((target[feature_name] - min_value) / (max_value - min_value))*2-1
+    return target
 
-def find_your_roommate(query_user_data, algo='euclidean'):
+def find_your_roommate(request, query_user_data, algo='euclidean'):
     # print(f'find_your_roommate query_user_data: {query_user_data}')
     # print(f'type query_user_data: {type(query_user_data)}')
     df = pd.DataFrame(query_user_data)
     meta_data = df.drop(
         labels=['int64_field_0', 'Full_Name', 'Email_address', 'Last_Name', 'First_Name', 'Uni', 'Nationality',
                 'School', 'Major', 'Roommate', 'Number_of_Roommates'], axis=1)
-    print(meta_data.columns)
+    # print(meta_data.columns)
     # Index(['Gender', 'Smoking', 'Alchohol', 'Habit', 'Roommate', 'Age',
     #        'Accept_Animals', 'Preferred_Budgets', 'Preferred_Distance'],
     #       dtype='object')
     features = ['Preferred_Budgets', 'Preferred_Distance', 'Age']
     normalized_data = normalize(meta_data, features)
     test_person = normalized_data.iloc[0]
+    print(f'test_person:\n{test_person}')
+
+    new_test = request.POST.dict()
+    print(f'new_test:\n{new_test}')
+
+    test_get_keys = {}
+    test_get_keys['Gender'] = float(new_test['Gender'])
+    test_get_keys['Smoking'] = float(new_test['Smoking'])
+    test_get_keys['Alcohol'] = float(new_test['Alcohol'])
+    test_get_keys['Habit'] = float(new_test['Habit'])
+    test_get_keys['Age'] = float(new_test['Age'])
+    test_get_keys['Accept_Animals'] = float(new_test['Pets'])
+    test_get_keys['Preferred_Budgets'] = float(new_test['numBudget'])
+    test_get_keys['Preferred_Distance'] = float(new_test['numDistance'])
+    print(f'test_get_keys:{test_get_keys}')
+    test_df = pd.DataFrame([test_get_keys]).iloc[0]
+    target = normalize_target(test_df, df, features)
+    print(f'test_df:\n{test_df}')
+    print(f'target:\n{target}')
+
     if algo == 'euclidean':
-        x = test_person
+        x = target
         dist_list = []
         for i in range(normalized_data.shape[0]):
             y = normalized_data.iloc[i]
