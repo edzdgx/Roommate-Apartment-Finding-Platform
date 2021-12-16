@@ -91,12 +91,18 @@ def show_results(request):
         for i in range(length_apt):
             apartment_Position = "apartment" + str(i)
             roomType_Position = "roomType" + str(i)
+            capacity_Position = "capacity" + str(i)
             location_Position = "location" + str(i)
             distance_Position = "distance" + str(i)
+            price_Position = "price" + str(i)
+            reviewsPerMonth_Position = "reviewsPerMonth" + str(i)
             results_data[apartment_Position] = query_apt_data[i]["name"]
             results_data[roomType_Position] = query_apt_data[i]["room_type"]
+            results_data[capacity_Position] = query_apt_data[i]["Capacity"]
             results_data[location_Position] = query_apt_data[i]["neighbourhood"]
             results_data[distance_Position] = round(query_apt_data[i]["distance_line"],2)
+            results_data[price_Position] = query_apt_data[i]["price_raw"] * 30 / query_apt_data[i]["Capacity"]
+            results_data[reviewsPerMonth_Position] = query_apt_data[i]["reviews_per_month"]
 
         if length_user != 0:
             for i in range(max):
@@ -104,7 +110,10 @@ def show_results(request):
                 email_Position = "email" + str(i)
                 gender_Position = "gender" + str(i)
                 nationality_Position = "nationality" + str(i)
-                roommateRatio_Position = "roommateRatio" + str(i)
+#                 roommateRatio_Position = "roommateRatio" + str(i)
+                age_Position = "age" + str(i)
+                budget_Position = "budge" + str(i)
+                preferredDistance_Position = "preferredDistance" + str(i)
                 results_data[fullName_Position] = query_user_data[i]["Full_Name"]
                 results_data[email_Position] = query_user_data[i]["Email_address"]
                 if query_user_data[i]["Gender"] == 1:
@@ -112,14 +121,14 @@ def show_results(request):
                 else:
                     results_data[gender_Position] = "Female"
                 results_data[nationality_Position] = query_user_data[i]["Nationality"]
+                results_data[age_Position] = query_user_data[i]["Age"]
+                results_data[budget_Position] = query_user_data[i]["Preferred_Budgets"]
+                results_data[preferredDistance_Position] = query_user_data[i]["Preferred_Distance"]
 #                 results_data[roommateRatio_Position] = query_user_data[i]["Full_Name"]
 
 
         results_data['roommatesRecommendation'] = "Roommates Recommendation"
         results_data['apartmentRecommendation'] = "Apartment Recommendation"
-        results_data['apartmentRatio0'] = "98%"
-        results_data['apartmentRatio1'] = "95%"
-        results_data['apartmentRatio2'] = "91%"
 
 
 
