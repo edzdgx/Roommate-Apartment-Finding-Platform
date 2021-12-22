@@ -15,7 +15,9 @@ Apartments: a dataset contains 10+ features and 40000+ rows including name, addr
 ## Demo
 
 You can see the demonstration of our project throught this link: https://www.youtube.com/watch?v=ccGrH4LN8sA
+
 ## Flow Chart
+![avatar](/docs/figs/fig2flowchart.png)
 
 ## Results
 
