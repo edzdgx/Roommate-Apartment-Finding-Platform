@@ -18,3 +18,60 @@ You can see the demonstration of our project throught this link: https://www.you
 ## Flow Chart
 
 ## Results
+
+## Organization
+```
+./
+├── .gitignore
+├── README.md
+├── data
+│   ├── airbnb.csv
+│   ├── countries.txt
+│   ├── majors.txt
+│   ├── roommates.csv
+│   └── shcools.txt
+├── docs
+│   ├── 6893_progress_paper.doc
+│   ├── figs
+│   │   ├── fig1arch.png
+│   │   ├── fig2flowchart.png
+│   │   ├── fig3frontinfo.png
+│   │   ├── fig4frontresult.png
+│   │   └── flowchart.png
+│   ├── progress_report.docx
+│   └── ~$93_progress_paper.doc
+├── final_BDA
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-38.pyc
+│   │   ├── search.cpython-38.pyc
+│   │   ├── search2.cpython-38.pyc
+│   │   ├── settings.cpython-38.pyc
+│   │   ├── urls.cpython-38.pyc
+│   │   ├── views.cpython-38.pyc
+│   │   └── wsgi.cpython-38.pyc
+│   ├── asgi.py
+│   ├── search.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── manage.py
+├── src
+│   ├── create_table_gbp.py
+│   ├── knn+cosine_similarity.ipynb
+│   ├── pull_from_gbq.py
+│   └── push_to_gbq.py
+├── static
+│   ├── css
+│   │   ├── postPatt.css
+│   │   └── resultsPatt.css
+│   ├── js
+│   │   ├── button.js
+│   │   └── display.js
+│   └── picture
+│       ├── Columbia.jpg
+│       └── columbia_university.jpg
+└── templates
+    ├── post.html
+    └── results.html
+```
